@@ -1,0 +1,58 @@
+﻿@page
+@model TrinitasHunde.Pages.MapModel
+@{
+    ViewData["Title"] = "Map";
+}
+
+<!-- Import google maps (add api key here) -->
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+
+
+<h2>Map</h2>
+
+<!-- Container for google maps -->
+<div id="mapContainer" style="width:100%;height:400px;"></div>
+
+
+
+<!-- Initialize google maps -->
+<script type="text/javascript">
+    // Initialize on document ready
+    $(document).ready(function () {
+
+        // Set a Latitude and Longitude
+        var vatican = new google.maps.LatLng(41.903, 12.454);
+
+        // Configure Google Map
+        var mapOptions = {
+            center: vatican,
+            zoom: 15,
+            maxZoom: 15,
+            minZoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        // Display the Google map in the prepared div container with the defined Options
+        var map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
+
+        map.addListener('click', function (e) {
+            // Get coordinates from event
+            var coords = e.latLng;
+
+            // Log coordinates in console for debugging
+            console.log(`Lat: ${coords.lat()} | Lng: ${coords.lng()}`);
+
+            // Create a marker at click position
+            new google.maps.Marker({
+                position: coords,
+                animation: google.maps.Animation.DROP,
+                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                map: map
+            });
+
+            // Pan the map to click position
+            map.panTo(coords);
+        });
+    });
+</script>
