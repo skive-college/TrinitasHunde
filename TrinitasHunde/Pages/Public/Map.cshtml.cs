@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace TrinitasHunde.Pages
+namespace TrinitasHunde.Pages.Public
 {
+
     public class MapModel : PageModel
     {
         public void OnGet()
