@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TrinitasDataAccess
 {
-    class Database
+    public class Database
     {
     }
 }
