@@ -33,9 +33,9 @@
                     <li><a asp-page="/Index">Home</a></li>
                     <li><a asp-page="/About">About</a></li>
                     <li><a asp-page="/Contact">Contact</a></li>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-page="/Admin/Map">Map</a></li>
+                        <li><a asp-page="/standard/Map">Map</a></li>
                     }
                     else
                     {

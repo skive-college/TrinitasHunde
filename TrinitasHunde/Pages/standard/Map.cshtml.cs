@@ -14,5 +14,15 @@ namespace TrinitasHunde.Pages.Admin
         {
 
         }
+        [HttpPost]
+        public void OnPostIndex()
+        {
+
+        }
+
+        public void OnPost()
+        {
+
+        }
     }
 }
