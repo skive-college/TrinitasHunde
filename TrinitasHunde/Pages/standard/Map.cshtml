@@ -35,7 +35,23 @@
                         };
 
                         // Display the Google map in the prepared div container with the defined Options
+
+                        
                         let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
+
+                        var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.Pins))');
+
+            // Loads array of pins into Map
+            for (var i = 0; i < arrayOfPins.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: { lat: arrayOfPins[i].gpsLatitude, lng: arrayOfPins[i].gpsLongitude },
+                    animation: google.maps.Animation.DROP,
+                    draggable: true,
+                    icon: arrayOfPins[i].pinColor,
+                    title: arrayOfPins[i].name,
+                    map: map
+                });
+                        }
 
                         map.addListener('click', function (e) {
                             // Get coordinates from event
