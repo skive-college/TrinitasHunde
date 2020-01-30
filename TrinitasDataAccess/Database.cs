@@ -16,6 +16,32 @@ namespace TrinitasDataAccess
             connectionString = _connectionString;
         }
 
+        public List<object> getAllObjects()
+        {
+            List<object> objects = new List<object>();
+            using (connection = new SqlConnection(connectionString))
+            {
+                string sqlString = "SELECT Locations.[Name], LocationTypes.[Type], PinTypes.[Type] AS PinType, Locations.GPSLatitude, Locations.GPSLongitude " +
+                                   "FROM Locations, LocationTypes, PinTypes " +
+                                   "WHERE Locations.[Type] = LocationTypes.[ID] AND Locations.PinType = PinTypes.[ID];";
+                connection.Open();
+                command = new SqlCommand(sqlString, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    objects.Add(new
+                    {
+                        Name = dataReader["Name"].ToString(),
+                        Type = dataReader["Type"].ToString(),
+                        PinType = dataReader["PinType"].ToString(),
+                        GPSLatitude = double.Parse(dataReader["GPSLatitude"].ToString()),
+                        GPSLongitude = double.Parse(dataReader["GPSLongitude"].ToString())
+                    });
+                }
+                return objects;
+            }
+        } // getAllObjects() end
+
         public int addLocation(string Name, double GPSLatitude, double GPSLongitude, int Location, int PinType)
         {
             int retur = -1;

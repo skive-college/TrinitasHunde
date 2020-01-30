@@ -20,4 +20,8 @@
     <ProjectReference Include="..\TrinitasDataAccess\TrinitasDataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TrinitasDataAccess\TrinitasDataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
