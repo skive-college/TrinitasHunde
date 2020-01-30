@@ -33,6 +33,18 @@
             // Display the Google map in the prepared div container with the defined Options
             let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
 
+            var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.Pins))');
+            for (var i = 0; i < arrayOfPins.length; i++) {
+                var marker = new google.maps.marker({
+                    position: { lat: arrayOfPins[i].GPSLatitude, lng: arrayOfPins[i].GPSLongitude },
+                    animation: google.maps.Animation.DROP,
+                    //draggable: true,
+                    icon: arrayOfPins[i].PinColor,
+                    title: arrayOfPins[i].Name,
+                    map: map
+                });
+            }
+
             map.addListener('click', function (e) {
                 // Get coordinates from event
                 let coords = e.latLng;
