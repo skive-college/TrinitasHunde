@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -54,22 +55,17 @@ namespace TrinitasHunde.Pages.Admin
         {
 
         }
-        [HttpPost]
-        public void OnPostIndex()
-        {
-
-        }
 
         public void OnPost()
         {
             TrinitasDataAccess.Database DB = new TrinitasDataAccess.Database("Data Source = planner.aspitweb.dk; Initial Catalog = trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
             var txtName = Request.Form["Name"];
-            double txtGPSLat = double.Parse( Request.Form["GPSLat"]);
-            var txtGPSLon = Request.Form["GPSLon"];
-            var txtLocation = Request.Form["Location"];
-            var txtPinType = Request.Form["PinType"];
+            double txtGPSLat = double.Parse( Request.Form["GPSLat"],CultureInfo.InvariantCulture);
+            double txtGPSLon = double.Parse( Request.Form["GPSLon"],CultureInfo.InvariantCulture);
+            int txtLocation = int.Parse(Request.Form["Location"]);
+            int txtPinType = int.Parse(Request.Form["PinType"]);
 
-            DB.addLocation(txtName, txtGPSLat, double.Parse(txtGPSLon), int.Parse(txtLocation), int.Parse(txtPinType));
+            DB.addLocation(txtName, txtGPSLat, txtGPSLon, txtLocation, txtPinType);
 
 
 
