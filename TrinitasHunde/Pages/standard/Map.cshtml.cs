@@ -22,6 +22,16 @@ namespace TrinitasHunde.Pages.Admin
 
         public void OnPost()
         {
+            TrinitasDataAccess.Database DB = new TrinitasDataAccess.Database("Data Source = planner.aspitweb.dk; Initial Catalog = trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
+            var txtName = Request.Form["Name"];
+            var txtGPSLat = Request.Form["GPSLat"];
+            var txtGPSLon = Request.Form["GPSLon"];
+            var txtLocation = Request.Form["Location"];
+            var txtPinType = Request.Form["PinType"];
+
+            DB.addLocation(txtName, double.Parse(txtGPSLat), double.Parse(txtGPSLon), int.Parse(txtLocation), int.Parse(txtPinType));
+
+
 
         }
     }
