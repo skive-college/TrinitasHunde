@@ -41,6 +41,11 @@
 
                 // Log coordinates in console
                 console.log(`Lat: ${coords.lat()} | Lng: ${coords.lng()}`);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", '/standard/map/OnPostIndex', true);
+
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("Lat=${coords.lat()}&Lng=${coords.lng()}");
 
                 // Create a marker at click position
                 let marker = new google.maps.Marker({

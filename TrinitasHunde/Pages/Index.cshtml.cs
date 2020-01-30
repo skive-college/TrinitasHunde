@@ -13,5 +13,11 @@ namespace TrinitasHunde.Pages
         {
 
         }
+
+        public void OnPost()
+        {
+            TrinitasDataAccess.Database DB = new TrinitasDataAccess.Database("Server=planner.aspitweb.dk;Database=TrinitasHunde;user id = aspitlab;password = aspitlab;MultipleActiveResultSets=true");
+            //DB.addLocation("test", 54.5, 9.7, 1, 2);
+        }
     }
 }
