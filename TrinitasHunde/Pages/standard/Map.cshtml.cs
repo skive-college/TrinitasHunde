@@ -123,19 +123,15 @@ namespace TrinitasHunde.Pages.Admin
         }
 
         [BindProperty]
-        public int Number { get; set; }
-
-        public List<SelectListItem> Options { get; set; }
+        public int LocationID { get; set; }
         public void OnPost()
         {
-            Options = new List<SelectListItem>();
-
             TrinitasDataAccess.Database DB = new TrinitasDataAccess.Database("Data Source = planner.aspitweb.dk; Initial Catalog = trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
             var txtName = Request.Form["Name"];
             double txtGPSLat = double.Parse( Request.Form["GPSLat"],CultureInfo.InvariantCulture);
             double txtGPSLon = double.Parse( Request.Form["GPSLon"],CultureInfo.InvariantCulture);
-            int txtLocation = int.Parse(Request.Form["Location"]);
-            int txtPinType = int.Parse(Request.Form["PinType"]);
+            int txtLocation = LocationID;
+            int txtPinType = 2;
 
             DB.addLocation(txtName, txtGPSLat, txtGPSLon, txtLocation, txtPinType);
 

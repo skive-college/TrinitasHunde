@@ -104,17 +104,16 @@
                     <br />
                     <label>Location</label>
                     <br />
-                    <input type="text" name="Location" required />
-                    <br />
-                    <label>PinType</label>
-                    <br />
-                    <input type="text" name="PinType" required />
+                    <select asp-for="@Model.LocationID">
+                        @{
+                            foreach (LocationType t in Model.LocationTypes)
+                            {
+                                <option value="@t.ID">@t.Name</option>
+                            }
+                        }
+                    </select>
                     <br />
                     <input type="submit" />
-
-                    <select asp-items="@Model.Options" asp-for="@Model.Number" >
-
-                    </select>
                 </form>
             </div>
         </div>
