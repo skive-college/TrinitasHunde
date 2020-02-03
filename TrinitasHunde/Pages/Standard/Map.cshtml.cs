@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using TrinitasDataAccess;
 
-namespace TrinitasHunde.Pages.Admin
+namespace TrinitasHunde.Pages.Standard
 {
     public class MapModel : PageModel
     {
