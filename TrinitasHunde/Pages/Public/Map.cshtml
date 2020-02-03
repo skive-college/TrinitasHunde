@@ -6,6 +6,27 @@
 
 <h2>Map</h2>
 
+<!-- Radio buttons for map search options -->
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p>Vælg en pin type:</p>
+            @foreach (PinType item in Model.PinTypes)
+            {
+                <input type="radio" name="pinType" value="@item.ID" /> @item.Name <br />
+            }
+        </div>
+        <div class="col">
+            <p>Vælg en lokation type:</p>
+            @foreach (LocationType item in Model.LocationTypes)
+            {
+                <input type="radio" name="locationType" value="@item.ID" /> @item.Name <br />
+            }
+        </div>
+        <input type="submit" value="Søg" />
+    </div>
+</div>
+
 <!-- Container for google maps -->
 <div id="mapContainer" style="width:100%;height:800px;"></div>
 
@@ -33,7 +54,7 @@
             // Display the Google map in the prepared div container with the defined Options
             let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
 
-            //Parse List of pins in C# to an Array of pins in JS
+            // Parse List of pins in C# to an Array of pins in JS
             var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.Pins))');
 
             // Loads array of pins into Map
@@ -56,7 +77,7 @@
 
                 // Log coordinates in console
                 console.log(`Lat: ${coords.lat()} | Lng: ${coords.lng()}`);
-                
+
                 // Pan the map to click position
                 map.panTo(coords);
             });
