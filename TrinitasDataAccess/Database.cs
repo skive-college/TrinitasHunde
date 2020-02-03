@@ -16,12 +16,13 @@ namespace TrinitasDataAccess
             connectionString = _connectionString;
         }
 
-        public List<object> getAllObjects()
+        public List<object> getAllLocations()
         {
             List<object> objects = new List<object>();
+
             using (connection = new SqlConnection(connectionString))
             {
-                string sqlString = "SELECT Locations.[Name], LocationTypes.[Type], PinTypes.[Type] AS PinType, Locations.GPSLatitude, Locations.GPSLongitude " +
+                string sqlString = "SELECT Locations.[ID], Locations.[Name], LocationTypes.[ID] AS TypeID, LocationTypes.[Type], PinTypes.[ID] AS PinTypeID, PinTypes.[Type] AS PinType, Locations.GPSLatitude, Locations.GPSLongitude " +
                                    "FROM Locations, LocationTypes, PinTypes " +
                                    "WHERE Locations.[Type] = LocationTypes.[ID] AND Locations.PinType = PinTypes.[ID];";
                 connection.Open();
@@ -31,18 +32,65 @@ namespace TrinitasDataAccess
                 {
                     objects.Add(new
                     {
+                        ID = int.Parse(dataReader["ID"].ToString()),
                         Name = dataReader["Name"].ToString(),
-                        Type = dataReader["Type"].ToString(),
+                        LocationTypeID = int.Parse(dataReader["TypeID"].ToString()),
+                        LocationType = dataReader["Type"].ToString(),
+                        PinTypeID = int.Parse(dataReader["PinTypeID"].ToString()),
                         PinType = dataReader["PinType"].ToString(),
                         GPSLatitude = double.Parse(dataReader["GPSLatitude"].ToString()),
                         GPSLongitude = double.Parse(dataReader["GPSLongitude"].ToString())
                     });
                 }
-                return objects;
             }
-        } // getAllObjects() end
+            return objects;
+        } // End getAllLocations()
 
-        public int addLocation(string Name, double GPSLatitude, double GPSLongitude, int Location, int PinType)
+        public List<object> getAllPinTypes()
+        {
+            List<object> objects = new List<object>();
+            using (connection = new SqlConnection(connectionString))
+            {
+                string sqlString = "SELECT * " +
+                                   "FROM PinTypes";
+                connection.Open();
+                command = new SqlCommand(sqlString, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    objects.Add(new
+                    {
+                        ID = int.Parse(dataReader["ID"].ToString()),
+                        Name = dataReader["Type"].ToString()
+                    });
+                }
+            }
+            return objects;
+        } // End getAllPinTypes()
+
+        public List<object> getAllLocationTypes()
+        {
+            List<object> objects = new List<object>();
+            using (connection = new SqlConnection(connectionString))
+            {
+                string sqlString = "SELECT * " +
+                                   "FROM LocationTypes";
+                connection.Open();
+                command = new SqlCommand(sqlString, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    objects.Add(new
+                    {
+                        ID = int.Parse(dataReader["ID"].ToString()),
+                        Name = dataReader["Type"].ToString()
+                    });
+                }
+            }
+            return objects;
+        } // End getAllLocationTypes()
+
+        public int addLocation(string _name, double _gpsLatitude, double _gpsLongitude, int _location, int _pinType)
         {
             int retur = -1;
             using (connection = new SqlConnection(connectionString))
@@ -50,11 +98,11 @@ namespace TrinitasDataAccess
                 string sql = "insert into Locations values(@Name, @GPSLatitude, @GPSLongitude, @Location, @PinType)";
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(sql, connection);
-                cmd.Parameters.AddWithValue("Name", Name);
-                cmd.Parameters.AddWithValue("GPSLatitude", GPSLatitude);
-                cmd.Parameters.AddWithValue("GPSLongitude", GPSLongitude);
-                cmd.Parameters.AddWithValue("Location", Location);
-                cmd.Parameters.AddWithValue("PinType", PinType);
+                cmd.Parameters.AddWithValue("Name", _name);
+                cmd.Parameters.AddWithValue("GPSLatitude", _gpsLatitude);
+                cmd.Parameters.AddWithValue("GPSLongitude", _gpsLongitude);
+                cmd.Parameters.AddWithValue("Location", _location);
+                cmd.Parameters.AddWithValue("PinType", _pinType);
                 retur = cmd.ExecuteNonQuery();
             }
             return retur;

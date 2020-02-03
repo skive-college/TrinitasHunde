@@ -7,11 +7,12 @@ namespace TrinitasHunde
 {
     public class Pin
     {
+        public int ID { get; set; }
         public string Name { get; set; }
         public double GPSLatitude { get; set; }
         public double GPSLongitude { get; set; }
         public string PinColor { get; set; }
-        public string PinType { get; set; }
-        public string LocationType { get; set; }
+        public PinType TypePin { get; set; }
+        public LocationType TypeLocation { get; set; }
     }
 }
