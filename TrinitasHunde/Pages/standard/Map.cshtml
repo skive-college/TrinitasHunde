@@ -92,25 +92,29 @@
                 <form method="post">
                     <label>Name</label>
                     <br />
-                    <input type="text" name="Name" required/>
+                    <input type="text" name="Name" required />
                     <br />
                     <label>GPSLatitude</label>
                     <br />
-                    <input type="text" name="GPSLat" id="GPSLat" required/>
+                    <input type="text" name="GPSLat" id="GPSLat" required />
                     <br />
                     <label>GPSLongitude</label>
                     <br />
-                    <input type="text" name="GPSLon" id="GPSLng" required/>
+                    <input type="text" name="GPSLon" id="GPSLng" required />
                     <br />
                     <label>Location</label>
                     <br />
-                    <input type="radio" name="Location" required/>
+                    <input type="text" name="Location" required />
                     <br />
                     <label>PinType</label>
                     <br />
-                    <input type="text" name="PinType" required/>
+                    <input type="text" name="PinType" required />
                     <br />
                     <input type="submit" />
+
+                    <select asp-items="@Model.Options" asp-for="@Model.Number" >
+
+                    </select>
                 </form>
             </div>
         </div>
