@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using TrinitasDataAccess;
 
 namespace TrinitasHunde.Pages.Admin
 {
     public class MapModel : PageModel
     {
-
         public List<Pin> Pins { get; set; }
         public List<PinType> PinTypes { get; set; }
         public List<LocationType> LocationTypes { get; set; }
 
+        [BindProperty]
+        public int LocationID { get; set; }
+
         public MapModel()
+        {
+        }
+
+        public void OnGet()
         {
             TrinitasDataAccess.Database database = new TrinitasDataAccess.Database(
                @"Data Source=planner.aspitweb.dk;Initial Catalog=trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
@@ -117,14 +120,8 @@ namespace TrinitasHunde.Pages.Admin
                 Pins.Add(pin);
             }
         } // End getLocations(Database)
-        public void OnGet()
-        {
 
-        }
-
-        [BindProperty]
-        public int LocationID { get; set; }
-        public void OnPost()
+        public IActionResult OnPost()
         {
             TrinitasDataAccess.Database DB = new TrinitasDataAccess.Database("Data Source = planner.aspitweb.dk; Initial Catalog = trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
             var txtName = Request.Form["Name"];
@@ -135,8 +132,8 @@ namespace TrinitasHunde.Pages.Admin
 
             DB.addLocation(txtName, txtGPSLat, txtGPSLon, txtLocation, txtPinType);
 
-
-
+            // Redirect to Get for PRG
+            return RedirectToPage();
         }
     }
 }
