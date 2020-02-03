@@ -11,11 +11,14 @@ namespace TrinitasHunde.Pages.Admin
 {
     public class MapModel : PageModel
     {
-
         public List<object> Objects { get; set; }
         public List<Pin> Pins { get; set; }
 
         public MapModel()
+        {
+        }
+
+        public void OnGet()
         {
             TrinitasDataAccess.Database database = new TrinitasDataAccess.Database(
                @"Data Source=planner.aspitweb.dk;Initial Catalog=trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
@@ -51,24 +54,19 @@ namespace TrinitasHunde.Pages.Admin
                 Pins.Add(pin);
             }
         }
-        public void OnGet()
-        {
 
-        }
-
-        public void OnPost()
+        public IActionResult OnPost()
         {
             TrinitasDataAccess.Database DB = new TrinitasDataAccess.Database("Data Source = planner.aspitweb.dk; Initial Catalog = trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
             var txtName = Request.Form["Name"];
-            double txtGPSLat = double.Parse( Request.Form["GPSLat"],CultureInfo.InvariantCulture);
-            double txtGPSLon = double.Parse( Request.Form["GPSLon"],CultureInfo.InvariantCulture);
+            double txtGPSLat = double.Parse(Request.Form["GPSLat"], CultureInfo.InvariantCulture);
+            double txtGPSLon = double.Parse(Request.Form["GPSLon"], CultureInfo.InvariantCulture);
             int txtLocation = int.Parse(Request.Form["Location"]);
             int txtPinType = int.Parse(Request.Form["PinType"]);
-
             DB.addLocation(txtName, txtGPSLat, txtGPSLon, txtLocation, txtPinType);
 
-
-
+            // Redirect to Get for PRG
+            return RedirectToPage();
         }
     }
 }
