@@ -6,64 +6,112 @@
 
 <h2>Map</h2>
 
-<!-- Container for google maps -->
-<div id="mapContainer" style="width:100%;height:400px;"></div>
 
-@section Scripts {
-    <!-- Import google maps (add api key here) -->
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <!-- Container for google maps -->
+            <div id="mapContainer" style="height:600px;"></div>
 
-    <!-- Initialize google maps -->
-    <script type="text/javascript">
-        // Initialize on document ready
-        $(document).ready(function () {
+            @section Scripts {
+                <!-- Import google maps (add api key here) -->
+                <script src="https://maps.googleapis.com/maps/api/js"></script>
 
-            // Set a Latitude and Longitude
-            let vatican = new google.maps.LatLng(41.903, 12.454);
+                <!-- Initialize google maps -->
+                <script type="text/javascript">
+                    // Initialize on document ready
+                    $(document).ready(function () {
 
-            // Configure Google Map
-            let mapOptions = {
-                center: vatican,
-                zoom: 15,
-                maxZoom: 15,
-                minZoom: 10,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
+                        // Set a Latitude and Longitude
+                        let vatican = new google.maps.LatLng(41.903, 12.454);
 
-            // Display the Google map in the prepared div container with the defined Options
-            let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
+                        // Configure Google Map
+                        let mapOptions = {
+                            center: vatican,
+                            zoom: 15,
+                            maxZoom: 15,
+                            minZoom: 10,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
 
-            map.addListener('click', function (e) {
-                // Get coordinates from event
-                let coords = e.latLng;
-                // Get placeId if a place was clicked
-                let placeId = e.placeId;
+                        // Display the Google map in the prepared div container with the defined Options
 
-                // Log coordinates in console
-                console.log(`Lat: ${coords.lat()} | Lng: ${coords.lng()}`);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", '/standard/map/OnPostIndex', true);
+                        
+                        let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
 
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.send("Lat=${coords.lat()}&Lng=${coords.lng()}");
+                        //Parse List of pins in C# to an Array of pins in JS
+                        var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.Pins))');
 
-                // Create a marker at click position
-                let marker = new google.maps.Marker({
-                    position: coords,
-                    animation: google.maps.Animation.DROP,
-                    draggable: true,
-                    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                    map: map
-                });
+                        // Loads array of pins into Map
+                        for (var i = 0; i < arrayOfPins.length; i++) {
+                            var marker = new google.maps.Marker({
+                                position: { lat: arrayOfPins[i].gpsLatitude, lng: arrayOfPins[i].gpsLongitude },
+                                animation: google.maps.Animation.DROP,
+                                draggable: true,
+                                icon: arrayOfPins[i].pinColor,
+                                title: arrayOfPins[i].name,
+                                map: map
+                            });
+                        }
+                     
 
-                // Remove marker if clicked (doesn't trigger on drag)
-                marker.addListener('click', function (e) {
-                    marker.setMap(null);
-                });
+                        map.addListener('click', function (e) {
+                            // Get coordinates from event
+                            let coords = e.latLng;
+                            // Get placeId if a place was clicked
+                            let placeId = e.placeId;
 
-                // Pan the map to click position
-                map.panTo(coords);
-            });
-        });
-    </script>
-}
+                            // Log coordinates in console
+                            console.log(`Lat: ${coords.lat()} | Lng: ${coords.lng()}`);
+
+                            document.getElementById("GPSLat").value = coords.lat();
+                            document.getElementById("GPSLng").value = coords.lng();
+                            
+                            // Create a marker at click position
+                            let marker = new google.maps.Marker({
+                                position: coords,
+                                animation: google.maps.Animation.DROP,
+                                draggable: true,
+                                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                                map: map
+                            });
+
+                            // Remove marker if clicked (doesn't trigger on drag)
+                            marker.addListener('click', function (e) {
+                                marker.setMap(null);
+                            });
+
+                            // Pan the map to click position
+                            map.panTo(coords);
+                        });
+                    });
+                </script>
+            }
+            </div>
+            <div class="col-sm-4">
+                <form method="post">
+                    <label>Name</label>
+                    <br />
+                    <input type="text" name="Name" required/>
+                    <br />
+                    <label>GPSLatitude</label>
+                    <br />
+                    <input type="text" name="GPSLat" id="GPSLat" required/>
+                    <br />
+                    <label>GPSLongitude</label>
+                    <br />
+                    <input type="text" name="GPSLon" id="GPSLng" required/>
+                    <br />
+                    <label>Location</label>
+                    <br />
+                    <input type="radio" name="Location" required/>
+                    <br />
+                    <label>PinType</label>
+                    <br />
+                    <input type="text" name="PinType" required/>
+                    <br />
+                    <input type="submit" />
+                </form>
+            </div>
+        </div>
+    </div>
