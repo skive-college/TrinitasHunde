@@ -6,7 +6,6 @@
 
 <h2>Map</h2>
 
-
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
@@ -36,7 +35,6 @@
 
                         // Display the Google map in the prepared div container with the defined Options
 
-                        
                         let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
 
                         //Parse List of pins in C# to an Array of pins in JS
@@ -65,7 +63,7 @@
 
                             document.getElementById("GPSLat").value = coords.lat();
                             document.getElementById("GPSLng").value = coords.lng();
-                            
+
                             // Create a marker at click position
                             let marker = new google.maps.Marker({
                                 position: coords,
@@ -111,8 +109,7 @@
                     <br />
                     <input type="submit" />
 
-                    <select asp-items="@Model.Options" asp-for="@Model.Number" >
-
+                    <select asp-items="@Model.Options" asp-for="@Model.Number">
                     </select>
                 </form>
             </div>

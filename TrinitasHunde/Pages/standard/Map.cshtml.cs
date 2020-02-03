@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using TrinitasDataAccess;
 
 namespace TrinitasHunde.Pages.Admin
@@ -16,6 +13,11 @@ namespace TrinitasHunde.Pages.Admin
         public List<Pin> Pins { get; set; }
         public List<PinType> PinTypes { get; set; }
         public List<LocationType> LocationTypes { get; set; }
+
+        [BindProperty]
+        public int Number { get; set; }
+
+        public List<SelectListItem> Options { get; set; }
 
         public MapModel()
         {
@@ -121,12 +123,6 @@ namespace TrinitasHunde.Pages.Admin
             }
         } // End getLocations(Database)
 
-        }
-
-        [BindProperty]
-        public int Number { get; set; }
-
-        public List<SelectListItem> Options { get; set; }
         public IActionResult OnPost()
         {
             Options = new List<SelectListItem>();
