@@ -7,25 +7,29 @@
 <h2>Map</h2>
 
 <!-- Radio buttons for map search options -->
-<div class="container">
-    <div class="row">
-        <div class="col">
+<div class="row">
+    <div class="col-sm-6">
+        <form asp-page-handler="SearchPinType" method="post">
             <p>Vælg en pin type:</p>
-            @foreach (PinType item in Model.PinTypes)
+            @foreach (PinType pinType in Model.PinTypes)
             {
-                <input type="radio" name="pinType" value="@item.ID" /> @item.Name <br />
+                <input type="radio" name="pinType" value="@pinType.ID" /> @pinType.Name <br />
             }
-        </div>
-        <div class="col">
+            <button class="btn btn-default">Søg pin type</button>
+        </form>
+    </div>
+    <div class="col-sm-6">
+        <form asp-page-handler="SearchLocationType" method="post">
             <p>Vælg en lokation type:</p>
-            @foreach (LocationType item in Model.LocationTypes)
+            @foreach (LocationType locationType in Model.LocationTypes)
             {
-                <input type="radio" name="locationType" value="@item.ID" /> @item.Name <br />
+                <input type="radio" name="locationType" value="@locationType.ID" /> @locationType.Name <br />
             }
-        </div>
-        <input type="submit" value="Søg" />
+            <button class="btn btn-default">Søg lokation type</button>
+        </form>
     </div>
 </div>
+<br />
 
 <!-- Container for google maps -->
 <div id="mapContainer" style="width:100%;height:800px;"></div>
@@ -55,8 +59,8 @@
             let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
 
             // Parse List of pins in C# to an Array of pins in JS
-            var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.Pins))');
-
+            var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.SearchPins))');
+                    
             // Loads array of pins into Map
             for (var i = 0; i < arrayOfPins.length; i++) {
                 var marker = new google.maps.Marker({
@@ -82,5 +86,25 @@
                 map.panTo(coords);
             });
         });
+
+        @*function searchPinsByID() {
+            // Remove all markers from map
+            marker.setMap(null);
+
+            // Parse List of pins in C# to an Array of pins in JS
+            var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.SearchPins))');
+
+            // Loads array of pins into Map
+            for (var i = 0; i < arrayOfPins.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: { lat: arrayOfPins[i].gpsLatitude, lng: arrayOfPins[i].gpsLongitude },
+                    animation: google.maps.Animation.DROP,
+                    draggable: true,
+                    icon: arrayOfPins[i].pinColor,
+                    title: arrayOfPins[i].name,
+                    map: map
+                });
+            }
+        }*@
     </script>
 }

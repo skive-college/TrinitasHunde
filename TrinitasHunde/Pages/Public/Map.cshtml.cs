@@ -14,21 +14,54 @@ namespace TrinitasHunde.Pages.Public
         public List<Pin> Pins { get; set; }
         public List<PinType> PinTypes { get; set; }
         public List<LocationType> LocationTypes { get; set; }
+        public List<Pin> SearchPins { get; set; }
 
         public MapModel()
         {
             TrinitasDataAccess.Database database = new TrinitasDataAccess.Database(
-               @"Data Source=planner.aspitweb.dk;Initial Catalog=trinitashunde;user id = aspitlab; password = aspitlab; Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+               @"Data Source = planner.aspitweb.dk; Initial Catalog = trinitashunde; user id = aspitlab; password = aspitlab; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
 
             // Gets all Locations
             getLocations(database);
-            
+
             // Gets all LocationTypes
             getLocationTypes(database);
             
             // Gets all PinTypes
             getPinTypes(database);
-        }
+        } // End Constructor()
+
+        public void OnPostSearchPinType()
+        {
+            // Gets ID from checked Radio button element
+            int searchID = int.Parse(Request.Form["pinType"].ToString());
+
+            // Instantiates new list with Pins by elementID
+            SearchPins = new List<Pin>();
+            foreach (Pin item in Pins)
+            {
+                if (item.TypePin.ID == searchID)
+                {
+                    SearchPins.Add(item);
+                }
+            }
+        } // End OnPostSearchPinType()
+
+        public void OnPostSearchLocationType()
+        {
+            // Gets ID from checked Radio button element
+            int searchID = int.Parse(Request.Form["locationType"].ToString());
+
+            // Instantiates new list with Pins by elementID
+            SearchPins = new List<Pin>();
+            foreach (Pin item in Pins)
+            {
+                if (item.TypeLocation.ID == searchID)
+                {
+                    SearchPins.Add(item);
+                }
+            }
+        } // End OnPostSearchLocationType()
 
         private void getPinTypes(Database _database)
         {
@@ -113,6 +146,7 @@ namespace TrinitasHunde.Pages.Public
                 }
                 Pins.Add(pin);
             }
+            SearchPins = Pins;
         } // End getLocations(Database)
 
         public void OnGet()
