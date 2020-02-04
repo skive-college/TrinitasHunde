@@ -6,30 +6,41 @@
 
 <h2>Users</h2>
 
-<div class="container d-flex">
-    <div class="row">
-        <div class="col-4">
-            <p>Email</p>
-        </div>
-        <div class="col-4">
-            <p>Confirm</p>
-        </div>
-        <div class="col-4">
-            <p>Deny</p>
-        </div>
-    </div>
-    @foreach (var pendingUser in Model.PendingUsers)
+<h4>Admin users</h4>
+<div class="container">
+    @foreach (var user in Model.AdminUsers)
     {
-    <form class="row" method="post">
-        <div class="col-4">
-            <p>@pendingUser.Email</p>
+    <div class="row" method="post">
+        <p>@user.Email</p>
+    </div>
+    }
+</div>
+
+<h4>Standard users</h4>
+<div class="container">
+    @foreach (var user in Model.StandardUsers)
+    {
+        <div class="row" method="post">
+            <p>@user.Email</p>
         </div>
-        <div class="col-4">
-            <input type="submit" name="submit" value="Confirm" />
-        </div>
-        <div class="col-4">
-            <input type="submit" name="submit" value="Deny" />
-        </div>
-    </form>
+    }
+</div>
+
+<h4>Pending users</h4>
+<div class="container">
+    @foreach (ApplicationUser user in Model.PendingUsers)
+    {
+        <form class="row" method="post">
+            <input type="hidden" name="email" value="@user.Email" />
+            <div class="col-sm-4">
+                <p>@user.Email</p>
+            </div>
+            <div class="col-sm-4">
+                <input type="submit" name="submit" value="Accept" />
+            </div>
+            <div class="col-sm-4">
+                <input type="submit" name="submit" value="Decline" />
+            </div>
+        </form>
     }
 </div>
