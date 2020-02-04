@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using TrinitasHunde.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TrinitasHunde.Services;
 
 namespace TrinitasHunde
 {
@@ -47,6 +49,15 @@ namespace TrinitasHunde
                 options.AddPolicy("Admin",
                     policy => policy.RequireRole("Admin"));
             });
+
+            services.AddTransient<IEmailSender, EmailSender>(i => new EmailSender(
+                    Configuration["EmailSender:Host"],
+                    Configuration.GetValue<int>("EmailSender:Port"),
+                    Configuration.GetValue<bool>("EmailSender:EnableSSL"),
+                    Configuration["EmailSender:UserName"],
+                    Configuration["EmailSender:Password"]
+                )
+            );
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
