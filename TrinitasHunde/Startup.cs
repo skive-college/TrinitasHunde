@@ -44,10 +44,16 @@ namespace TrinitasHunde
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            // Add policies for roles
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin",
                     policy => policy.RequireRole("Admin"));
+            });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Standard",
+                    policy => policy.RequireRole("Standard","Admin"));
             });
 
             services.AddTransient<IEmailSender, EmailSender>(i => new EmailSender(
@@ -64,7 +70,11 @@ namespace TrinitasHunde
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Admin", "Admin");
-                });
+                })
+                .AddRazorPagesOptions(options =>
+                 {
+                     options.Conventions.AuthorizeFolder("/Standard", "Standard");
+                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,7 +98,7 @@ namespace TrinitasHunde
 
             app.UseAuthentication();
 
-            DataSeeder.Seed(roleManager);
+            DataSeeder.Seed(userManager, roleManager, Configuration);
 
             app.UseMvc();
         }
