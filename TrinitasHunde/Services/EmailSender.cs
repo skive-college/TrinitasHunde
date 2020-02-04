@@ -28,7 +28,10 @@ namespace TrinitasHunde.Services
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var client = new SmtpClient(host, port)
+            // Dont actually send anything yet, just return early
+            return Task.CompletedTask;
+
+            SmtpClient client = new SmtpClient(host, port)
             {
                 Credentials = new NetworkCredential(userName, password),
                 EnableSsl = enableSSL
