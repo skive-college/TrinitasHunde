@@ -1,0 +1,35 @@
+﻿@page
+@model TrinitasHunde.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h2>Users</h2>
+
+<div class="container d-flex">
+    <div class="row">
+        <div class="col-4">
+            <p>Email</p>
+        </div>
+        <div class="col-4">
+            <p>Confirm</p>
+        </div>
+        <div class="col-4">
+            <p>Deny</p>
+        </div>
+    </div>
+    @foreach (var pendingUser in Model.PendingUsers)
+    {
+    <form class="row" method="post">
+        <div class="col-4">
+            <p>@pendingUser.Email</p>
+        </div>
+        <div class="col-4">
+            <input type="submit" name="submit" value="Confirm" />
+        </div>
+        <div class="col-4">
+            <input type="submit" name="submit" value="Deny" />
+        </div>
+    </form>
+    }
+</div>
