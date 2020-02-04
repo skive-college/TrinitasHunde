@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TrinitasDataAccess;
+using TrinitasHunde.Models;
 
 namespace TrinitasHunde.Pages.Public
 {

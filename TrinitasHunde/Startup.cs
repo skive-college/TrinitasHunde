@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using TrinitasHunde.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TrinitasHunde.Services;
 
 namespace TrinitasHunde
 {
@@ -42,18 +44,37 @@ namespace TrinitasHunde
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            // Add policies for roles
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin",
                     policy => policy.RequireRole("Admin"));
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Standard",
+                    policy => policy.RequireRole("Standard","Admin"));
+            });
+
+            services.AddTransient<IEmailSender, EmailSender>(i => new EmailSender(
+                    Configuration["EmailSender:Host"],
+                    Configuration.GetValue<int>("EmailSender:Port"),
+                    Configuration.GetValue<bool>("EmailSender:EnableSSL"),
+                    Configuration["EmailSender:UserName"],
+                    Configuration["EmailSender:Password"]
+                )
+            );
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Admin", "Admin");
-                });
+                })
+                .AddRazorPagesOptions(options =>
+                 {
+                     options.Conventions.AuthorizeFolder("/Standard", "Standard");
+                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +98,7 @@ namespace TrinitasHunde
 
             app.UseAuthentication();
 
-            DataSeeder.Seed(roleManager);
+            DataSeeder.Seed(userManager, roleManager, Configuration);
 
             app.UseMvc();
         }
