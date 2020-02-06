@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace TrinitasHunde
@@ -23,7 +20,8 @@ namespace TrinitasHunde
         private static async Task SeedSuperUser(UserManager<ApplicationUser> userManager, IConfiguration config)
         {
             // Prepare SuperUser
-            ApplicationUser user = new ApplicationUser {
+            ApplicationUser user = new ApplicationUser
+            {
                 UserName = config["SuperUser:Email"],
                 Email = config["SuperUser:Email"]
             };
@@ -33,15 +31,23 @@ namespace TrinitasHunde
             {
                 // Create SuperUser
                 IdentityResult result = await userManager.CreateAsync(user, config["SuperUser:Password"]);
-                // Add SuperUser to Admin role
-                await userManager.AddToRoleAsync(user, "Admin");
+            }
+
+            // Get SuperUser instance after assertion
+            ApplicationUser superUser = await userManager.FindByNameAsync(user.UserName);
+
+            // If SuperUser isnt in SuperUser role
+            if (!await userManager.IsInRoleAsync(superUser, "SuperUser"))
+            {
+                // Add SuperUser to SuperUser role
+                await userManager.AddToRoleAsync(superUser, "SuperUser");
             }
         }
 
         private static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
         {
             // Specify roles to seed
-            string[] roles = new string[]{ "Standard", "Admin" };
+            string[] roles = new string[] { "Standard", "Admin", "SuperUser" };
             // Iterate over each role
             foreach (string roleName in roles)
             {
