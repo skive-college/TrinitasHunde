@@ -14,7 +14,12 @@
 
             @section Scripts {
                 <!-- Import google maps (add api key here) -->
-                <script src="https://maps.googleapis.com/maps/api/js"></script>
+                @*<script src="https://maps.googleapis.com/maps/api/js"></script>*@
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUghIkP-flWUIKPmiauzXKkqtjWCMtT-s"></script>
+
+                <!-- Import google maps geocoding (add api key here) -->
+                @*<script src="https://maps.googleapis.com/maps/api/geocode/json"></script>*@
+                @*<script src="https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDUghIkP-flWUIKPmiauzXKkqtjWCMtT-s"></script>*@
 
                 <!-- Initialize google maps -->
                 <script type="text/javascript">
@@ -34,10 +39,12 @@
                         };
 
                         // Display the Google map in the prepared div container with the defined Options
-
                         let map = new google.maps.Map(document.getElementById("mapContainer"), mapOptions);
+                        // Instantiate geocoder from API
+                        var geocoder = new google.maps.Geocoder;
+                        var infowindow = new google.maps.InfoWindow;
 
-                        //Parse List of pins in C# to an Array of pins in JS
+                        // Parse List of pins in C# to an Array of pins in JS
                         var arrayOfPins = JSON.parse('@Html.Raw(Json.Serialize(@Model.Pins))');
 
                         // Loads array of pins into Map
@@ -61,15 +68,45 @@
                             // Log coordinates in console
                             console.log(`Lat: ${coords.lat()} | Lng: ${coords.lng()}`);
 
+                            // Set latitude value in GPSLat element
                             document.getElementById("GPSLat").value = coords.lat();
+                            // Set longitude value in GPSLng element
                             document.getElementById("GPSLng").value = coords.lng();
+
+                            //// Get human-readable address by Reverse-Geocoding from clicked location at map
+                            //geocoder.geocode({ 'location': coords }, function (results, status) {
+                            //    // ZERO_RESULTS = geocode was successful, but returned no readable results
+                            //    if (status === 'OK' || status === 'ZERO_RESULTS') {
+                            //        if (results[0]) {
+                            //            map.setZoom(11);
+                            //            // Create a marker at click position
+                            //            let marker = new google.maps.Marker({
+                            //                position: coords,
+                            //                animation: google.maps.Animation.DROP,
+                            //                draggable: true,
+                            //                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                            //                map: map
+                            //            });
+                            //            infowindow.setContent(results[0].formatted_address);
+                            //            infowindow.open(map, marker);
+                            //            // Set latitude value in GPSLat element
+                            //            document.getElementById("GPSLat").value = coords.lat();
+                            //            // Set longitude value in GPSLng element
+                            //            document.getElementById("GPSLng").value = coords.lng();
+                            //        } //else {
+                            //        //    window.alert('No results found');
+                            //        //}
+                            //    } else {
+                            //        window.alert('Geocoder failed due to: ' + status);
+                            //    }
+                            //});
 
                             // Create a marker at click position
                             let marker = new google.maps.Marker({
                                 position: coords,
                                 animation: google.maps.Animation.DROP,
                                 draggable: true,
-                                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                                icon: "https://maps.google.com/mapfiles/ms/icons/blue.png",
                                 map: map
                             });
 
@@ -84,34 +121,34 @@
                     });
                 </script>
             }
-            </div>
-            <div class="col-sm-4">
-                <form method="post">
-                    <label>Name</label>
-                    <br />
-                    <input type="text" name="Name" required />
-                    <br />
-                    <label>GPSLatitude</label>
-                    <br />
-                    <input type="text" name="GPSLat" id="GPSLat" required />
-                    <br />
-                    <label>GPSLongitude</label>
-                    <br />
-                    <input type="text" name="GPSLon" id="GPSLng" required />
-                    <br />
-                    <label>Location</label>
-                    <br />
-                    <select asp-for="@Model.LocationID">
-                        @{
-                            foreach (LocationType t in Model.LocationTypes)
-                            {
-                                <option value="@t.ID">@t.Name</option>
-                            }
+        </div>
+        <div class="col-sm-4">
+            <form method="post">
+                <label>Name</label>
+                <br />
+                <input type="text" name="Name" required />
+                <br />
+                <label>GPSLatitude</label>
+                <br />
+                <input type="text" name="GPSLat" id="GPSLat" required />
+                <br />
+                <label>GPSLongitude</label>
+                <br />
+                <input type="text" name="GPSLon" id="GPSLng" required />
+                <br />
+                <label>Location</label>
+                <br />
+                <select asp-for="@Model.LocationID">
+                    @{
+                        foreach (LocationType t in Model.LocationTypes)
+                        {
+                            <option value="@t.ID">@t.Name</option>
                         }
-                    </select>
-                    <br />
-                    <input type="submit" />
-                </form>
-            </div>
+                    }
+                </select>
+                <br />
+                <input type="submit" />
+            </form>
         </div>
     </div>
+</div>
