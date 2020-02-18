@@ -6,29 +6,62 @@
 
 <h2>Users</h2>
 
+@if (Utilities.getRole(User) >= Role.SuperUser)
+{
+    <h4>Super users</h4>
+    <div class="container">
+        @foreach (var user in Model.UserLookup[Role.SuperUser])
+        {
+            <p>@user.Email</p>
+        }
+    </div>
+}
+
 <h4>Admin users</h4>
 <div class="container">
-    @foreach (var user in Model.AdminUsers)
+    @foreach (var user in Model.UserLookup[Role.Admin])
     {
-    <div class="row" method="post">
-        <p>@user.Email</p>
-    </div>
+        <form class="row" method="post">
+            <input type="hidden" name="email" value="@user.Email" />
+            <div class="col-sm-4">
+                <p>@user.Email</p>
+            </div>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                @if (Utilities.getRole(User) >= Role.SuperUser)
+                {
+                    <input type="submit" name="submit" value="Demote" />
+                }
+            </div>
+        </form>
     }
 </div>
 
 <h4>Standard users</h4>
 <div class="container">
-    @foreach (var user in Model.StandardUsers)
+    @foreach (var user in Model.UserLookup[Role.Standard])
     {
-        <div class="row" method="post">
-            <p>@user.Email</p>
-        </div>
+        <form class="row" method="post">
+            <input type="hidden" name="email" value="@user.Email" />
+            <div class="col-sm-4">
+                <p>@user.Email</p>
+            </div>
+            <div class="col-sm-4">
+                @if (Utilities.getRole(User) >= Role.SuperUser)
+                {
+                    <input type="submit" name="submit" value="Promote" />
+                }
+            </div>
+            <div class="col-sm-4">
+                <input type="submit" name="submit" value="Delete" />
+            </div>
+        </form>
     }
 </div>
 
 <h4>Pending users</h4>
 <div class="container">
-    @foreach (ApplicationUser user in Model.PendingUsers)
+    @foreach (ApplicationUser user in Model.UserLookup[Role.Pending])
     {
         <form class="row" method="post">
             <input type="hidden" name="email" value="@user.Email" />

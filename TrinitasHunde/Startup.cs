@@ -47,13 +47,18 @@ namespace TrinitasHunde
             // Add policies for roles
             services.AddAuthorization(options =>
             {
+                options.AddPolicy("SuperUser",
+                    policy => policy.RequireRole("SuperUser"));
+            });
+            services.AddAuthorization(options =>
+            {
                 options.AddPolicy("Admin",
-                    policy => policy.RequireRole("Admin"));
+                    policy => policy.RequireRole("Admin", "SuperUser"));
             });
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Standard",
-                    policy => policy.RequireRole("Standard","Admin"));
+                    policy => policy.RequireRole("Standard", "Admin", "SuperUser"));
             });
 
             services.AddTransient<IEmailSender, EmailSender>(i => new EmailSender(
